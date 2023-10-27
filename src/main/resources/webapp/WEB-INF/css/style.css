@@ -232,6 +232,7 @@ table button:hover {
 	overflow-y: scroll;
 	padding-right: 5px;
 	max-height: 500px;
+	width: 450px;
 }
 
 .user-info {
@@ -289,6 +290,7 @@ table button:hover {
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	background-color: #f8f8f8;
+	height: 500px;
 }
 
 /* Estilos para as habilidades selecionadas */

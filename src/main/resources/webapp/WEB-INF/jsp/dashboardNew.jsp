@@ -72,6 +72,10 @@
         var estadosSelecionados = [];
         var resultadosUnicos = [];
         var estadosDisponiveis = [];
+        let resultado = document.querySelector("#resultados");
+    	let num_resultados = document.querySelector("#num_cooperados");
+
+
 
         function loadEstado() {
             let estadoInput = document.querySelector("#estadoInput")
@@ -161,10 +165,10 @@
 
         function pesquisar() {
         	let num_resultados = document.querySelector("#num_cooperados");
-            let resultado = document.querySelector("#resultados");
             let nomePesquisa = document.querySelector("#barraPesquisa").value;
             let modeloAtuacaoPesquisa = document.querySelector("#modeloAtuacao").value;
             resultado.innerHTML = "";
+            num_resultados = '';
 
             fetch("http://localhost:8080/website/api/usuarios")
                 .then(function (response) {
@@ -231,15 +235,35 @@
                                     user.appendChild(p);
                                 }
                             }
-                            resultadosUnicos.push(user);
+                            resultadosUnicos.push(user);        
                         }
+                        num_resultados.innerHTML = resultadosUnicos.length;             
+
                     }
-                	num_resultados.textContext = resultadosUnicos.length;
-                    resultadosUnicos.forEach(function (user) {
-                        resultado.appendChild(user);
-                    });
+	                carregarProximoLote()
                 });
         }
+        let resultadosPorLote = 10; // Número de resultados por lote
+        let pagina = 1; // Número da página
+        
+        function carregarProximoLote() {
+            const resultadosRestantes = resultadosUnicos.slice(pagina * resultadosPorLote, (pagina + 1) * resultadosPorLote);
+
+            if (resultadosRestantes.length > 0) {
+                resultadosRestantes.forEach(function (user) {
+                    resultado.appendChild(user);
+                });
+                pagina++;
+            }
+        }
+        let usersInfo = document.querySelector(".users-info");
+        
+		usersInfo.addEventListener("scroll", function() {
+		    if (usersInfo.scrollHeight - usersInfo.scrollTop === usersInfo.clientHeight) {
+		        carregarProximoLote();
+		    }
+		});
+
         function pesquisaHabilidade() {
             let pesquisaHabilidade = document.querySelector("#habilidades").value;
             let termos = document.querySelector("#habilidades_selecionadas");
